@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'pettyjobsapp',
+    'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt',
     'djoser',
@@ -62,6 +64,7 @@ SIMPLE_JWT = {
 }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -98,11 +101,11 @@ WSGI_APPLICATION = 'pettyjobs.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': '',
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': '',
+        'NAME': 'pettyjobs',
+        'USER': 'postgres',
+        'PASSWORD': 'yolo0009',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -147,3 +150,16 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+AUTH_USER_MODEL = 'pettyjobsapp.User'
+
+DJOSER = {
+    'SEND_ACTIVATION_EMAIL':False,
+    'SERIALIZERS':{
+        'user_create':'pettyjobsapp.serializers.UserCreateSerializer',
+        'user':'pettyjobsapp.serializers.UserCreateSerializer',
+        'user_delete' : 'djoser.serializers.UserDeleteSerializer',
+    }
+}

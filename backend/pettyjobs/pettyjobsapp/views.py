@@ -1,14 +1,10 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.authentication import JWTAuthentication
+from .permissions import IsWorker
 
-
-
-class Index(APIView):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+class WorkerView(APIView):
+    permission_classes = [IsAuthenticated, IsWorker]
 
     def get(self, request):
-        content = {'message': 'Hello, World!'}
-        return Response(content)
+        return Response({"message": "Hello, Worker!"})
