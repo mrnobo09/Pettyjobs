@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,PermissionsMixin, BaseUserManager
+from django.core.exceptions import ValidationError
 
 class UserAccountManager(BaseUserManager):
     def create_user(self, username,full_name,user_type, password=None):
@@ -45,6 +46,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['full_name','user_type']
 
+
     def getName(self):
         return self.full_name
     
@@ -80,8 +82,19 @@ class Job(models.Model):
     description = models.CharField(max_length = 2000)
     status = models.CharField(max_length=50,choices=status_choices,default=WAITING)
 
+    approved_by = models.ForeignKey(User, on_delete=models.CASCADE,related_name='approved_by',default=None)
+    accepted_by = models.ForeignKey(User,on_delete=models.CASCADE,related_name = 'accepted_by',default=None)
+
+    def save(self):
+        if self.approved_by and self.approved_by.user_type != User.IN_CHARGE:
+            raise ValidationError(f"The user must be of type '{User.IN_CHARGE}' to approve a job")
+        if self.accepted_by and self.accepted_by.user_type != User.WORKER:
+            raise ValidationError(f"The user must be of type '{User.WORKER}' to approve a job")
+        
+        super().save()
+
     def __str__(self):
-        return self.id + ". " + self.title
+        return str(self.id) + ". " + self.title
 
 class JobImages(models.Model):
     job = models.ForeignKey(Job,related_name='images',on_delete=models.CASCADE)
