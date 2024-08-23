@@ -50,3 +50,41 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     def __str__(self):
         return self.username
+
+
+class Job(models.Model):
+    WAITING = 'waiting'
+    IN_PROGRESS = 'in_progress'
+    COMPLETED = 'completed'
+    REJECTED = 'rejected'
+
+    MECHANICAL = 'mechanical'
+    ELECTRICAL = 'electrical'
+
+    status_choices = [
+        (WAITING,'Waiting'),
+        (IN_PROGRESS, 'In Progress'),
+        (COMPLETED,'Completed'),
+        (REJECTED,'Rejected')
+    ]
+
+    job_choices = [
+        (MECHANICAL, 'Mechanical'),
+        (ELECTRICAL, 'Electrical'),
+    ]
+
+    id = models.AutoField(null=False,primary_key=True)
+    title = models.CharField(max_length = 500)
+    job_type = models.CharField(max_length = 255,choices=job_choices,default=MECHANICAL)
+    location = models.CharField(max_length = 500)
+    description = models.CharField(max_length = 2000)
+    status = models.CharField(max_length=50,choices=status_choices,default=WAITING)
+
+    def __str__(self):
+        return self.id + ". " + self.title
+
+class JobImages(models.Model):
+    job = models.ForeignKey(Job,related_name='images',on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='jobs/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
