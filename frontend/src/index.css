@@ -1,3 +1,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+
+.montserrat {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.faded-border {
+    position: relative;
+}
+
+.faded-border::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: -1px; /* Adjust based on border width */
+    width: 1px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.7));
+    pointer-events: none;
+}

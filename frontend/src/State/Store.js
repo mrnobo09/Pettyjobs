@@ -7,9 +7,7 @@ const initialState = {
 const Store = configureStore(
     {
         reducer:{
-            reducer:{
-                login:loginReducer
-            }
+            login:loginReducer
         },
     }
 )
