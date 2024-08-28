@@ -125,9 +125,9 @@ class Job(models.Model):
     status = models.CharField(max_length=50,choices=status_choices,default=WAITING)
     criticality = models.CharField(max_length=50,choices=criticality_choices,default=LOW)
 
-    approved_by = models.ForeignKey(User, on_delete=models.CASCADE,related_name='approved_by',default=None)
-    accepted_by = models.ForeignKey(User, on_delete=models.CASCADE,related_name = 'accepted_by',default=None)
-    uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='done_by',default=None)
+    approved_by = models.ForeignKey(User, on_delete=models.CASCADE,related_name='approved_by',null=True,blank = True)
+    accepted_by = models.ForeignKey(User, on_delete=models.CASCADE,related_name = 'accepted_by',null = True,blank = True)
+    uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='done_by',null = True,blank = True)
 
     uploaded_at = models.DateTimeField(default = timezone.now)
     approved_at = models.DateTimeField(null = True, blank=True)
