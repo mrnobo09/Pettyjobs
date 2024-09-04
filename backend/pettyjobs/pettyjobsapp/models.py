@@ -69,7 +69,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserAccountManager()
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['full_name','user_type','sub_type']
+    REQUIRED_FIELDS = ['full_name']
 
     def save(self, *args, **kwargs):
         if self.user_type in [self.IN_CHARGE, self.CONTRACTOR] and not self.sub_type:
@@ -127,13 +127,13 @@ class Job(models.Model):
 
     approved_by = models.ForeignKey(User, on_delete=models.CASCADE,related_name='approved_by',null=True,blank = True)
     accepted_by = models.ForeignKey(User, on_delete=models.CASCADE,related_name = 'accepted_by',null = True,blank = True)
-    uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='done_by',null = True,blank = True)
+    uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='uploaded_by',null = True,blank = True)
 
     uploaded_at = models.DateTimeField(default = timezone.now)
     approved_at = models.DateTimeField(null = True, blank=True)
     completed_at = models.DateTimeField(null = True, blank=True)
 
-    def save(self):
+    def save(self,*args,**kwargs):
         if self.approved_by and self.approved_by.user_type != User.IN_CHARGE:
             raise ValidationError(f"The user must be of type '{User.IN_CHARGE}' to approve a job")
         if self.accepted_by and self.accepted_by.user_type != User.CONTRACTOR:
@@ -141,7 +141,7 @@ class Job(models.Model):
         if self.uploaded_by and self.uploaded_by.user_type != User.WORKER:
             raise ValidationError(f"User must be a {User.WORKER} to post a job")
         
-        super().save()
+        super().save(*args,**kwargs)
 
     def __str__(self):
         return str(self.id) + ". " + self.title
