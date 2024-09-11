@@ -8,7 +8,7 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(Job)
 class JobAdmin(admin.ModelAdmin):
-    list_display = ('id','title','location','job_type','description','status','approved_by','accepted_by','uploaded_by',)
+    list_display = ('id','title','location','job_type','description','status','approved_by','accepted_by','uploaded_by','uploaded_at','approved_at','completed_at')
     list_filter = ('status','approved_by','accepted_by','uploaded_by')
 
 @admin.register(JobImages)

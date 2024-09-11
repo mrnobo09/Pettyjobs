@@ -33,7 +33,7 @@ def job_saved(sender, instance, created, **kwargs):
 
 @receiver(post_delete, sender=Job)
 def job_deleted(sender, instance, **kwargs):
-    print(f"[DEBUG] Job deleted signal received for: {instance.title}")
+    print(f"Job deleted signal received for: {instance.title}")
     channel_layer = get_channel_layer()
     async_to_sync(channel_layer.group_send)(
         f'jobs_{instance.job_type}',
